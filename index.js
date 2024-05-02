@@ -65,6 +65,26 @@ async function run() {
       const result = await bookingCollection.find(query).toArray();
       res.send(result);
     });
+    app.delete('/bookings/:id',async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const result= bookingCollection.deleteOne(query)
+      res.send(result)
+    })
+    app.patch('/bookings/:id', async (req,res)=>{
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)}
+      const updateBooking = req.body;
+      console.log(updateBooking)
+      const updateDoc = {
+        $set: {
+          status: updateBooking.status
+        
+        }
+      }
+      const result = await bookingCollection.updateOne(query, updateDoc);
+      res.send(result)
+    })
 
     // Root route
     app.get('/', (_, res) => {
